@@ -6,17 +6,26 @@
                 {{message}}
             </div>
         {{/if}}
+        {{#if error}}
+            <div class="alert alert-danger" role="alert">
+                {{error}}
+            </div>
+        {{/if}}
 
         <form method="POST" action="/auth/login">
             <div class="form-group">
-                <label for="exampleInputEmail1">Email address</label>
-                <input name="email" type="email" class="form-control" id="exampleInputEmail1" placeholder="Enter email">
+                <label for="emailInput">Email address</label>
+                <input name="email" type="email" class="form-control" id="emailInput" placeholder="Enter email">
+                {{#if errors}} <span class="text-danger">{{errors.email.msg}}</span> {{/if}}
             </div>
+
             <div class="form-group">
-                <label for="exampleInputPassword1">Password</label>
-                <input name="password" type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
+                <label for="passwordInput">Password</label>
+                <input name="password" type="password" class="form-control" id="passwordInput" placeholder="Password">
+                {{#if errors}} <span class="text-danger">{{errors.password.msg}}</span> {{/if}}
             </div>
             <button type="submit" class="btn btn-primary">Login</button>
         </form>
+        <span>Doesn't have an account? Please <a class="no-underline text-bold text-dark" href="/auth/register">Register</a> </span>
     </div>
 </div>

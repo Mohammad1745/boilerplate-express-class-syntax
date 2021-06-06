@@ -14,18 +14,20 @@ class Request {
         return Promise.resolve(true)
     }
 
-    validate = request => {
+    validate = (request, response, next) => {
         const error = validationResult(request)
         if (!error.isEmpty()) {
-            return {
-                success: false,
-                message: error.array().reduce((message, error) => message+' '+error.msg, '')
+            if (request.headers['content-type'] === 'application/json')  {
+                return response.json({
+                    success: false,
+                    message: error.array().reduce((message, error) => message+" "+error.msg, "")
+                })
             }
+            response.cookie('errors', error.array())
+            return response.redirect('back')
         } else {
-            return {
-                success: true,
-                data: request
-            }
+            response.cookie('errors', [])
+            next()
         }
     }
 }

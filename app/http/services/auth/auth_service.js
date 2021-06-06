@@ -34,8 +34,11 @@ class TodoService extends ResponseService {
     login = async (request, response, type="api") => {
         try {
             const { email, password } = request.body
-            const user = await this.userService.findOneWhere({where: {email: email, password:makeHash(email,password)}})
+            const user = await this.userService.findOneWhere({where: {email: email}})
             if (!user){
+                return this.response().error('Email User Doesn\'t Exists. Please Register An Account.')
+            }
+            if (user.password !== makeHash(email,password)){
                 return this.response().error('Wrong email or password.')
             }
             const authToken = jwt.sign({id:user.id}, process.env.AUTH_SECRET, {expiresIn: SESSION_TIMEOUT+'s'})
