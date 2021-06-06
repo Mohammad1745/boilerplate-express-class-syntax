@@ -18,8 +18,7 @@ class TaskController extends Controller {
      * @return {JSON}
      */
     login = async (request, response) => {
-        const result = loginRequest.validate(request)
-        return !result.success ? response.json(result) : response.json( await this.service.login( request, response))
+        return response.json( await this.service.login( request, response))
     }
 
     /**
@@ -28,8 +27,7 @@ class TaskController extends Controller {
      * @return {JSON}
      */
     signup = async (request, response) => {
-        const result = signupRequest.validate(request)
-        return !result.success ? response.json(result) : response.json( await this.service.signUp( request))
+        return response.json( await this.service.signUp( request))
     }
 
     /**
@@ -38,9 +36,7 @@ class TaskController extends Controller {
      * @return {JSON}
      */
     logout = (request, response) => {
-        const serviceResponse = this.service.logout( request, response)
-        if (!serviceResponse.success) return response.redirect('back')
-        return response.redirect('/')
+        return response.json( this.service.logout)
     }
 }
 

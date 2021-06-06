@@ -17,16 +17,18 @@ class Request {
     validate = (request, response, next) => {
         const error = validationResult(request)
         if (!error.isEmpty()) {
+            const errors = {}
+            error.array().map(error => errors[error.param] = error)
             if (request.headers['content-type'] === 'application/json')  {
                 return response.json({
                     success: false,
-                    message: error.array().reduce((message, error) => message+" "+error.msg, "")
+                    message: errors
                 })
             }
-            response.cookie('errors', error.array())
+            response.cookie('errors', errors)
             return response.redirect('back')
         } else {
-            response.cookie('errors', [])
+            response.clearCookie('errors')
             next()
         }
     }

@@ -8,11 +8,7 @@ class Controller {
             cookies[element] = request.cookies[element]
             response.clearCookie(element)
         })
-        //adding keys to each error of errors
-        cookies.errors ? cookies.errors.map(error => cookies.errors[error.param] = error) : cookies.errors = {}
-        //merging cookies.data into data
         data = {...data, ...cookies.data}
-
         return response.render(view, {...cookies, ...data, layout})
     }
 
