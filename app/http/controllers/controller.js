@@ -14,8 +14,8 @@ class Controller {
 
     webResponse = (serviceResponse, successRoute, {failRoute, successRouteData, failRouteData}={}, request, response) => {
         if (serviceResponse.data) {
-            successRouteData = {...successRouteData, ...serviceResponse.data}
-            failRouteData = {...failRouteData, ...serviceResponse.data}
+            successRouteData = {...successRouteData, item: serviceResponse.data}
+            failRouteData = {...failRouteData, item: serviceResponse.data}
         }
         if (!serviceResponse.success) {
             response.cookie('error', serviceResponse.message)
