@@ -6,8 +6,8 @@ class SignupRequest extends Request{
             firstName: 'required|string',
             lastName: 'required|string',
             email: 'required|string',
-            password: 'required|string',
-            confirmPassword: 'required|string',
+            password: 'required|string|min:8',
+            confirmPassword: 'required|string|min:8',
         })
     }
 }
