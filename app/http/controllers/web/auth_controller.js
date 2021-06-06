@@ -16,7 +16,7 @@ class TaskController extends Controller {
      * @return {JSON}
      */
     login = (request, response) => {
-        this.view('auth/login', {layout: 'auth.hbs'}, request, response)
+        return this.view('auth/login', {layout: 'auth.hbs'}, request, response)
     }
 
     /**
@@ -25,7 +25,7 @@ class TaskController extends Controller {
      * @return {JSON}
      */
     signup = (request, response) => {
-        this.view('auth/signup', {layout: 'auth.hbs'}, request, response)
+        return this.view('auth/signup', {layout: 'auth.hbs'}, request, response)
     }
 
     /**
@@ -35,12 +35,7 @@ class TaskController extends Controller {
      */
     loginProcess = async (request, response) => {
         const serviceResponse = await this.service.login( request, response, 'web')
-        if (!serviceResponse.success) {
-            response.cookie('error', serviceResponse.message)
-            return response.redirect('back')
-        }
-        response.cookie('success', serviceResponse.message)
-        return response.redirect('/user/dashboard')
+        return this.webResponse(serviceResponse, '/user/dashboard', {}, request, response)
     }
 
     /**
@@ -50,12 +45,7 @@ class TaskController extends Controller {
      */
     signupProcess = async (request, response) => {
         const serviceResponse = await this.service.signUp( request)
-        if (!serviceResponse.success) {
-            response.cookie('error', serviceResponse.message)
-            return response.redirect('back')
-        }
-        response.cookie('success', serviceResponse.message)
-        return response.redirect('/auth/login')
+        return this.webResponse(serviceResponse, '/auth/login', {}, request, response)
     }
 
     /**
@@ -65,11 +55,7 @@ class TaskController extends Controller {
      */
     logoutProcess = (request, response) => {
         const serviceResponse = this.service.logout( request, response)
-        if (!serviceResponse.success) {
-            response.cookie('error', serviceResponse.message)
-            return response.redirect('back')
-        }
-        return response.redirect('/')
+        return this.webResponse(serviceResponse, '/', {}, request, response)
     }
 }
 
