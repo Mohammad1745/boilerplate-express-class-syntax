@@ -1,12 +1,5 @@
 <div class="row justify-content-md-center" style="margin-top: 30px">
     <div class="col-md-4">
-
-        {{#if message}}
-            <div class="alert {{messageClass}}" role="alert">
-                {{message}}
-            </div>
-        {{/if}}
-
         <form method="POST" action="/auth/register">
             <div class="form-group">
                 <label for="firstNameInput">First Name</label>

@@ -16,10 +16,7 @@ class TaskController extends Controller {
      * @return {JSON}
      */
     login = (request, response) => {
-        let error = request.cookies['error']
-        let errors = request.cookies['errors']
-        errors ? errors.map(error => errors[error.param] = error) : errors = {}
-        response.render('auth/login', {errors, error, layout: 'auth.hbs'})
+        this.view('auth/login', {layout: 'auth.hbs'}, request, response)
     }
 
     /**
@@ -28,10 +25,7 @@ class TaskController extends Controller {
      * @return {JSON}
      */
     signup = (request, response) => {
-        let error = request.cookies['error']
-        let errors = request.cookies['errors']
-        errors ? errors.map(error => errors[error.param] = error) : errors = {}
-        response.render('auth/signup', {errors, error, layout: 'auth.hbs'})
+        this.view('auth/signup', {layout: 'auth.hbs'}, request, response)
     }
 
     /**
@@ -45,6 +39,7 @@ class TaskController extends Controller {
             response.cookie('error', serviceResponse.message)
             return response.redirect('back')
         }
+        response.cookie('success', serviceResponse.message)
         return response.redirect('/user/dashboard')
     }
 
@@ -59,6 +54,7 @@ class TaskController extends Controller {
             response.cookie('error', serviceResponse.message)
             return response.redirect('back')
         }
+        response.cookie('success', serviceResponse.message)
         return response.redirect('/auth/login')
     }
 
@@ -69,7 +65,10 @@ class TaskController extends Controller {
      */
     logoutProcess = (request, response) => {
         const serviceResponse = this.service.logout( request, response)
-        if (!serviceResponse.success) return response.redirect('back')
+        if (!serviceResponse.success) {
+            response.cookie('error', serviceResponse.message)
+            return response.redirect('back')
+        }
         return response.redirect('/')
     }
 }

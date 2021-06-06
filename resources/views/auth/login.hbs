@@ -1,17 +1,5 @@
 <div class="row justify-content-md-center" style="margin-top: 100px">
     <div class="col-md-6">
-
-        {{#if message}}
-            <div class="alert {{messageClass}}" role="alert">
-                {{message}}
-            </div>
-        {{/if}}
-        {{#if error}}
-            <div class="alert alert-danger" role="alert">
-                {{error}}
-            </div>
-        {{/if}}
-
         <form method="POST" action="/auth/login">
             <div class="form-group">
                 <label for="emailInput">Email address</label>

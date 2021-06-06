@@ -84,7 +84,7 @@ class TodoService extends ResponseService {
      */
     logout = (request, response) => {
         try {
-            response.cookie('authToken', null);
+            response.clearCookie('authToken');
             return this.response().success('User Logged Out Successfully')
         } catch (e) {
             return this.response().error(e.message)
