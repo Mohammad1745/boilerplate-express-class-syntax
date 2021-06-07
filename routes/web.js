@@ -15,5 +15,6 @@ route.get('/', (req, res) => {
     }
     else res.redirect('/auth/login')
 })
+route.get('/*', (req, res) => res.redirect('/'))
 
 module.exports = route
