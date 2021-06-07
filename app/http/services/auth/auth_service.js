@@ -41,8 +41,9 @@ class AuthService extends ResponseService {
             if (user.password !== makeHash(email,password)){
                 return this.response().error('Wrong email or password.')
             }
-            const authToken = jwt.sign({id:user.id}, process.env.AUTH_SECRET, {expiresIn: SESSION_TIMEOUT+'s'})
-            const {firstName, lastName} = user
+            const {id, firstName, lastName, role} = user
+            const payload = {id, firstName, lastName, email, role}
+            const authToken = jwt.sign(payload, process.env.AUTH_SECRET, {expiresIn: SESSION_TIMEOUT+'s'})
             let data = {firstName, lastName, email}
             if (type==="api") {
                 data.authorization = {
