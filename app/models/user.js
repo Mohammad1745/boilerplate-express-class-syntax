@@ -24,11 +24,29 @@ module.exports = (sequelize, DataTypes) => {
     },
     email: {
       type: DataTypes.STRING,
+      unique:true,
+      isEmail:true,
       allowNull: false
     },
     password: {
       type: DataTypes.STRING,
       allowNull: false
+    },
+    phoneCode: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+    phone: {
+      type: DataTypes.STRING,
+      unique:true,
+      allowNull: false
+    },
+    phoneVerificationCode: {
+      type: DataTypes.STRING,
+    },
+    isPhoneVerified: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false
     },
     role: {
       type: DataTypes.INTEGER,

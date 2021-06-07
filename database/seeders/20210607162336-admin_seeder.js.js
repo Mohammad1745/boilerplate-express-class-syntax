@@ -20,6 +20,9 @@ module.exports = {
       lastName: 'Admin',
       email: 'admin@example.com',
       password: makeHash('admin@example.com','123456789'),
+      phoneCode: '+880',
+      phone: '1857712135',
+      isPhoneVerified: true,
       role: ADMIN_ROLE,
       createdAt : new Date(),
       updatedAt : new Date()

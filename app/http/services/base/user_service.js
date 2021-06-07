@@ -11,12 +11,15 @@ class UserService extends Service {
         super(new UserRepository)
     }
 
-    userDataFormatter = data => {
+    userDataFormatter = (data, verificationCode) => {
         return data ?
             {
                 firstName: data.firstName,
                 lastName: data.lastName,
                 email: data.email,
+                phoneCode: data.phoneCode,
+                phone: data.phone,
+                phoneVerificationCode: verificationCode,
                 password: makeHash(data.email,data.password),
                 role: data.role ? data.role : USER_ROLE
             }

@@ -1,7 +1,8 @@
 const ResponseService = require('../response_service')
 const UserService = require('../base/user_service')
+const twilioClient = require('twilio')(process.env.TWILIO_SID, process.env.TWILIO_TOKEN)
 const jwt = require('jsonwebtoken')
-const {makeHash} = require('../../../helper/helper')
+const {makeHash, randomNumber, sendMessage} = require('../../../helper/helper')
 const {SESSION_TIMEOUT} = require('../../../helper/core_constants')
 
 class AuthService extends ResponseService {
@@ -12,17 +13,6 @@ class AuthService extends ResponseService {
     constructor() {
         super()
         this.userService = new UserService
-    }
-
-    /**
-     * @return {Object}
-     */
-    index = async () => {
-        try {
-            return this.response(await this.userService.findAll()).success()
-        } catch (e) {
-            return this.response().error(e.message)
-        }
     }
 
     /**
@@ -70,9 +60,30 @@ class AuthService extends ResponseService {
             if (user) {
                 return this.response().error('User Already Exists')
             }
-            user = await this.userService.create( this.userService.userDataFormatter( request.body))
-            const {firstName, lastName, email} = user
-            return this.response({firstName, lastName, email}).success('User Signed Up Successfully')
+            const code = randomNumber(6)
+            user = await this.userService.create( this.userService.userDataFormatter( request.body, code))
+            // sendMessage(user.phoneCode+user.phone, `\nYour account verification code is ${code}`, () => {}, err => {})
+            const {firstName, lastName, email, phoneCode, phone} = user
+            return this.response({firstName, lastName, email, phoneCode, phone}).success(`User Signed Up Successfully. Verification code has been send to ${user.phoneCode}${user.phone}.`)
+        } catch (e) {
+            return this.response().error(e.message)
+        }
+    }
+
+    /**
+     * @param {Object} request
+     * @return {Object}
+     */
+    phoneVerification = async request => {
+        try {
+            let user = await this.userService.findOneWhere({where: {phoneCode: request.body.phoneCode, phone: request.body.phone}})
+            if (!user) {
+                return this.response().error('Invalid User')
+            }
+            if (user.phoneVerificationCode !== request.body.code) {
+                return this.response().error('Invalid Code')
+            }
+            return this.response().success(`Verification successful`)
         } catch (e) {
             return this.response().error(e.message)
         }
@@ -87,53 +98,6 @@ class AuthService extends ResponseService {
         try {
             response.clearCookie('authToken');
             return this.response().success('User Logged Out Successfully')
-        } catch (e) {
-            return this.response().error(e.message)
-        }
-    }
-
-    /**
-     * @param {Object} request
-     * @return {Object}
-     */
-    read = async request => {
-        try {
-        const user = await this.userService.findOneWhere({where: {id: Number(request.params.id)}})
-            return this.response(user).success()
-        } catch (e) {
-            return this.response().error(e.message)
-        }
-    }
-
-    /**
-     * @param {Object} request
-     * @return {Object}
-     */
-    update = async request => {
-        try {
-            const user = await this.userService.findOneWhere({where: {id: Number(request.params.id)}})
-            if (!user){
-                return this.response().error('User Doesn\'t Exists')
-            }
-            await this.userService.updateWhere({where:{id: Number(request.params.id)}}, this.userService.userDataFormatter( request.body))
-            return this.response().success('User Updated Successfully')
-        } catch (e) {
-            return this.response().error(e.message)
-        }
-    }
-
-    /**
-     * @param {Object} request
-     * @return {Object}
-     */
-    delete = async request => {
-        try {
-            let user = await this.userService.findOneWhere({where: {id: Number(request.params.id)}})
-            if (!user){
-                return this.response().error('User Doesn\'t Exists')
-            }
-            await this.userService.destroy({where:{id: Number(request.params.id)}})
-            return this.response().success('User Deleted Successfully')
         } catch (e) {
             return this.response().error(e.message)
         }

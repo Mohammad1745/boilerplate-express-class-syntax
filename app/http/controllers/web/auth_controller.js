@@ -13,7 +13,6 @@ class AuthController extends Controller {
     /**
      * @param {Object} request
      * @param {Object} response
-     * @return {JSON}
      */
     login = (request, response) => {
         return this.view('auth/login', {layout: 'auth.hbs'}, request, response)
@@ -22,7 +21,6 @@ class AuthController extends Controller {
     /**
      * @param {Object} request
      * @param {Object} response
-     * @return {JSON}
      */
     signup = (request, response) => {
         return this.view('auth/signup', {layout: 'auth.hbs'}, request, response)
@@ -31,7 +29,6 @@ class AuthController extends Controller {
     /**
      * @param {Object} request
      * @param {Object} response
-     * @return {JSON}
      */
     loginProcess = async (request, response) => {
         const serviceResponse = await this.service.login( request, response, 'web')
@@ -41,17 +38,32 @@ class AuthController extends Controller {
     /**
      * @param {Object} request
      * @param {Object} response
-     * @return {JSON}
      */
     signupProcess = async (request, response) => {
         const serviceResponse = await this.service.signUp( request)
+        return this.webResponse(serviceResponse, '/auth/phone-verification', {}, request, response)
+    }
+
+    /**
+     * @param {Object} request
+     * @param {Object} response
+     */
+    phoneVerification = (request, response) => {
+        return this.view('auth/phoneVerification', {layout: 'auth.hbs'}, request, response)
+    }
+
+    /**
+     * @param {Object} request
+     * @param {Object} response
+     */
+    phoneVerificationProcess = async (request, response) => {
+        const serviceResponse = await this.service.phoneVerification( request)
         return this.webResponse(serviceResponse, '/auth/login', {}, request, response)
     }
 
     /**
      * @param {Object} request
      * @param {Object} response
-     * @return {JSON}
      */
     logoutProcess = (request, response) => {
         const serviceResponse = this.service.logout( request, response)

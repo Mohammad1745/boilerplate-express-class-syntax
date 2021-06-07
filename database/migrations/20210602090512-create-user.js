@@ -18,7 +18,25 @@ module.exports = {
       },
       email: {
         allowNull: false,
+        unique:true,
+        isEmail:true,
         type: Sequelize.STRING
+      },
+      phoneCode: {
+        allowNull: false,
+        type: Sequelize.STRING
+      },
+      phone: {
+        allowNull: false,
+        unique:true,
+        type: Sequelize.STRING
+      },
+      phoneVerificationCode: {
+        type: Sequelize.STRING
+      },
+      isPhoneVerified: {
+        defaultValue: false,
+        type: Sequelize.BOOLEAN
       },
       password: {
         allowNull: false,

@@ -20,6 +20,18 @@
             </div>
 
             <div class="form-group">
+                <label for="phoneCodeInput">Phone Code</label>
+                <input name="phoneCode" type="text" class="form-control" id="phoneCodeInput" placeholder="Enter phone code" {{#if old}} value="{{old.phoneCode}}" {{/if}}>
+                {{#if errors}} <span class="text-danger">{{errors.phoneCode.msg}}</span> {{/if}}
+            </div>
+
+            <div class="form-group">
+                <label for="phoneInput">Phone Number</label>
+                <input name="phone" type="text" class="form-control" id="phoneInput" placeholder="Enter phone number " {{#if old}} value="{{old.phone}}" {{/if}}>
+                {{#if errors}} <span class="text-danger">{{errors.phone.msg}}</span> {{/if}}
+            </div>
+
+            <div class="form-group">
                 <label for="passwordInput">Password</label>
                 <input name="password" type="password" class="form-control" id="passwordInput" placeholder="Password">
                 {{#if errors}} <span class="text-danger">{{errors.password.msg}}</span> {{/if}}

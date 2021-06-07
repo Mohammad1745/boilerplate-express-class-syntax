@@ -1,4 +1,5 @@
 const crypto = require('crypto')
+const twilioClient = require('twilio')(process.env.TWILIO_SID, process.env.TWILIO_TOKEN)
 
 module.exports = {
     roles : input => {
@@ -17,6 +18,26 @@ module.exports = {
         return input ? output[input] : output;
     },
 
+    sendMessage: (toNumber, message, successCallback, errorCallback) => {
+        twilioClient.messages.create({
+            to: toNumber,
+            from: process.env.TWILIO_NUMBER,
+            body: message,
+        }).then(function() {
+            successCallback()
+        }).catch(function(err) {
+            errorCallback(err)
+        })
+    },
+
+    randomNumber : (length = 10) => {
+        let response = ''
+        for (let i = 0; i < length; i++) {
+            let y = Math.random()*100
+            response += String(y).substr(String(y).length-1, 1)
+        }
+        return response;
+    },
 
     makeHash : (secret,data) =>  crypto.createHash('sha256').update(secret+data).digest('base64'),
 
