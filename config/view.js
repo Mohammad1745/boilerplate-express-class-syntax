@@ -1,6 +1,8 @@
 const exphbs = require('express-handlebars')
 
-module.exports = app => {
+module.exports = (app, express) => {
+    app.use(express.static('public'))
+
     app.engine('hbs', exphbs({
         // defaultLayout: 'auth',
         extname: '.hbs'

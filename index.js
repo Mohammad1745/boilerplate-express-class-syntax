@@ -3,7 +3,7 @@ const app = express()
 
 require('dotenv').config()
 require('./config/auth')(app)
-require('./config/view')(app)
+require('./config/view')(app, express)
 require('./app/providers/route_service_provider')(app, express)
 
 
