@@ -1,6 +1,6 @@
 const Request = require('../request')
 
-class TaskRequest extends Request{
+class LoginRequest extends Request{
     constructor() {
         super({
             email: 'required|string',
@@ -9,4 +9,4 @@ class TaskRequest extends Request{
     }
 }
 
-module.exports = new TaskRequest()
+module.exports = new LoginRequest()

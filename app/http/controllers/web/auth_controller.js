@@ -1,7 +1,7 @@
 const Controller = require('../controller')
 const AuthService = require('../../services/auth/auth_service')
 
-class TaskController extends Controller {
+class AuthController extends Controller {
     /**
      * AuthController constructor.
      */
@@ -59,4 +59,4 @@ class TaskController extends Controller {
     }
 }
 
-module.exports = new TaskController()
+module.exports = new AuthController()

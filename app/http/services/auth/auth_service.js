@@ -4,7 +4,7 @@ const jwt = require('jsonwebtoken')
 const {makeHash} = require('../../../helper/helper')
 const {SESSION_TIMEOUT} = require('../../../helper/core_constants')
 
-class TodoService extends ResponseService {
+class AuthService extends ResponseService {
 
     /**
      * UserService constructor.
@@ -139,4 +139,4 @@ class TodoService extends ResponseService {
     }
 }
 
-module.exports = TodoService
+module.exports = AuthService
