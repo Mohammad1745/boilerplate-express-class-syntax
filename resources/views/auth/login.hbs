@@ -3,7 +3,7 @@
         <form method="POST" action="/auth/login">
             <div class="form-group">
                 <label for="emailInput">Email address</label>
-                <input name="email" type="email" class="form-control" id="emailInput" placeholder="Enter email">
+                <input name="email" type="email" class="form-control" id="emailInput" placeholder="Enter email" {{#if old}} value="{{old.email}}" {{/if}}>
                 {{#if errors}} <span class="text-danger">{{errors.email.msg}}</span> {{/if}}
             </div>
 

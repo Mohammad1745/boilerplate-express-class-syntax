@@ -38,6 +38,7 @@ class Request {
                     message: errors
                 })
             }
+            response.cookie('old', request.body)
             response.cookie('errors', errors)
             return response.redirect('back')
         } else {

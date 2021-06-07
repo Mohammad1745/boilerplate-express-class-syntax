@@ -3,7 +3,7 @@ class Controller {
 
     view = (view, {data, layout} = {}, request, response) => {
         //cookies from redirected routes
-        const cookies = {errors:[] , error:null, success:null, data:{}}
+        const cookies = {errors:[] , error:null, success:null, old:{}, data:{}}
         Object.keys(cookies).map(element => {
             cookies[element] = request.cookies[element]
             response.clearCookie(element)
