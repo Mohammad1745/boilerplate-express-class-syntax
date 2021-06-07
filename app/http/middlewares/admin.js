@@ -5,7 +5,7 @@ module.exports = {
         if (!req.user) {
             return res.redirect('/auth/login')
         }
-        if (!(req.user && req.user.role===ADMIN_ROLE)) {
+        if (!(req.user.role && req.user.role===ADMIN_ROLE)) {
             return res.redirect('/')
         }
         next()
