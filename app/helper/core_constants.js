@@ -1,3 +1,6 @@
-const SESSION_TIMEOUT = 30*60
+module.exports = {
+    ADMIN_ROLE : 1,
+    USER_ROLE : 2,
 
-module.exports = {SESSION_TIMEOUT}
+    SESSION_TIMEOUT : 30*60,
+}

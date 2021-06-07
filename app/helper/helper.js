@@ -1,6 +1,23 @@
 const crypto = require('crypto')
 
 module.exports = {
+    roles : input => {
+        let output = {
+            ADMIN_ROLE: 'Admin',
+            USER_ROLE: 'User'
+            //...
+        }
+        return input ? output[input] : output;
+    },
+    userRoles : input => {
+        let output = {
+            USER_ROLE: 'User'
+            //...
+        }
+        return input ? output[input] : output;
+    },
+
+
     makeHash : (secret,data) =>  crypto.createHash('sha256').update(secret+data).digest('base64'),
 
     wordSplitter: string => {
