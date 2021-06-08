@@ -1,10 +1,12 @@
 module.exports = {
     verified : (req, res, next) => {
-        if (!req.user) {
-            return res.redirect('/auth/login')
-        }
-        if (!req.user.isPhoneVerified) {
-            return res.redirect('/auth/phone-verification')
+        if (!(req.user && req.user.isPhoneVerified)) {
+            return req.headers['content-type']==="application/json" ?
+                res.json({
+                    success: false,
+                    message: 'Phone is not verified'
+                })
+                : res.redirect('/auth/phone-verification')
         }
         next()
     }

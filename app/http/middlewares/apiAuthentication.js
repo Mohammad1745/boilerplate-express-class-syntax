@@ -6,10 +6,18 @@ module.exports = {
         if (token) {
             req.user = null
             jwt.verify(token, process.env.AUTH_SECRET, (err, user) => {
-                if (err) return res.sendStatus(401)
+                if (err) return res.json({
+                    success: false,
+                    message: 'Unauthenticated'
+                })
                 req.user = user
                 next()
             })
-        } else return res.sendStatus(401)
+        } else {
+            return res.json({
+                success: false,
+                message: 'Unauthenticated'
+            })
+        }
     }
 }

@@ -8,6 +8,8 @@ const {authApi}  = require('../../app/http/middlewares/apiAuthentication')
 
 route.post('/login', loginRequest.validators, loginRequest.validate, authController.login)
 route.post('/register', signupRequest.validators, signupRequest.validate, authController.signup)
+route.get('/resend-phone-verification-code', authController.resendPhoneVerificationCode)
+route.put('/phone-verification', authController.phoneVerificationProcess)
 //middleware
 route.use(authApi)
 route.get('/logout', authController.logout)

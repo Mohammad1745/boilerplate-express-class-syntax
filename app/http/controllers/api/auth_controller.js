@@ -25,7 +25,25 @@ class AuthController extends Controller {
      * @return {JSON}
      */
     signup = async (request, response) => {
-        return response.json( await this.service.signUp( request))
+        return response.json( await this.service.signUp( request, response))
+    }
+
+    /**
+     * @param {Object} request
+     * @param {Object} response
+     * @return {JSON}
+     */
+    resendPhoneVerificationCode = async (request, response) => {
+        return response.json( await this.service.resendPhoneVerificationCode( request))
+    }
+
+    /**
+     * @param {Object} request
+     * @param {Object} response
+     * @return {JSON}
+     */
+    phoneVerificationProcess = async (request, response) => {
+        return response.json( await this.service.phoneVerification( request))
     }
 
     /**
