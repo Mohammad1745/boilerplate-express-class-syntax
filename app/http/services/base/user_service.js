@@ -27,7 +27,7 @@ class UserService extends Service {
             : {}
     }
 
-    authentication = (user, request, response) => {
+    authorizeUser = (user, request, response) => {
         const {id, firstName, lastName, role, email, phoneCode, phone, isPhoneVerified} = user
         const data = {id, firstName, lastName, email, role, phoneCode, phone, isPhoneVerified}
         const authToken = jwt.sign(data, process.env.AUTH_SECRET, {expiresIn: SESSION_TIMEOUT+'s'})

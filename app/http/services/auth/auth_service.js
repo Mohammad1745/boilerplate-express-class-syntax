@@ -29,7 +29,7 @@ class AuthService extends ResponseService {
             if (user.password !== makeHash(email,password)){
                 return this.response().error('Wrong email or password.')
             }
-            const data = this.userService.authentication(user, request, response)
+            const data = this.userService.authorizeUser(user, request, response)
             return this.response(data).success('User Logged In Successfully')
         } catch (e) {
             return this.response().error(e.message)
@@ -50,7 +50,7 @@ class AuthService extends ResponseService {
             user = await this.userService.create( this.userService.userDataFormatter( request.body, code))
             // sendMessage(user.phoneCode+user.phone, `\nYour account verification code is ${code}`, () => {}, err => {})//TODO: uncomment to get verification sms
 
-            const data = this.userService.authentication(user, request, response)
+            const data = this.userService.authorizeUser(user, request, response)
             return this.response(data).success(`User Signed Up Successfully. Verification code has been send to ${user.phoneCode}${user.phone}.`)
         } catch (e) {
             return this.response().error(e.message)
