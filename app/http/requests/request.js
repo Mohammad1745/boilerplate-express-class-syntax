@@ -16,7 +16,15 @@ class Request {
             else if (rule==='number' && typeof value !== 'number') return Promise.reject(`${key} must be a number.`)
             else if (rule==='email') {
                 const regex = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-                if (!(typeof value === 'string' && regex.test(value))) return Promise.reject(`${key} must be a valid email.`)
+                if (!(typeof value === 'string' && regex.test(value))) return Promise.reject(`${key} is invalid.`)
+            }
+            else if (rule.startsWith('regex:')) {
+                let regString = rule.split(':')[1]
+                regString = regString.substr(1, regString.length-2)
+                console.log(regString)
+                const regex = new RegExp(regString)
+                console.log(regex)
+                if (!(typeof value === 'string' && regex.test(value))) return Promise.reject(`${key} is invalid.`)
             }
             else if (rule.startsWith('min:')) {
                 const min = Number(rule.split(':')[1])
