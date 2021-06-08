@@ -19,7 +19,7 @@ class AuthService extends ResponseService {
      * @param type
      * @return {Object}
      */
-    login = async (request, response, type="api") => {
+    login = async (request, response) => {
         try {
             const { email, password } = request.body
             const user = await this.userService.findOneWhere({where: {email: email}})
@@ -38,6 +38,7 @@ class AuthService extends ResponseService {
 
     /**
      * @param {Object} request
+     * @param response
      * @return {Object}
      */
     signUp = async (request, response) => {

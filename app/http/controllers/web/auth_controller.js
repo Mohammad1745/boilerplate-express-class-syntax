@@ -31,7 +31,7 @@ class AuthController extends Controller {
      * @param {Object} response
      */
     loginProcess = async (request, response) => {
-        const serviceResponse = await this.service.login( request, response, 'web')
+        const serviceResponse = await this.service.login( request, response)
         return this.webResponse(serviceResponse, '/user/dashboard', {}, request, response)
     }
 
