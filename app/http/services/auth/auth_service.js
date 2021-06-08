@@ -90,7 +90,7 @@ class AuthService extends ResponseService {
             if (user.phoneVerificationCode !== request.body.code) {
                 return this.response().error('Invalid Code')
             }
-            await this.userService.updateWhere({where: {id: user.id}}, {isPhoneVerified: true})
+            await this.userService.updateWhere({where: {id: user.id}}, {phoneVerificationCode:null, isPhoneVerified: true})
             return this.response().success(`Verification successful`)
         } catch (e) {
             return this.response().error(e.message)
