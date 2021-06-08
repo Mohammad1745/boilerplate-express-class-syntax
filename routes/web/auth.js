@@ -10,6 +10,7 @@ route.get('/login', authController.login)
 route.get('/register', authController.signup)
 route.post('/login', loginRequest.validators, loginRequest.validate, authController.loginProcess)
 route.post('/register', signupRequest.validators, signupRequest.validate, authController.signupProcess)
+route.get('/resend-phone-verification-code', authController.resendPhoneVerificationCode)
 route.get('/phone-verification', authController.phoneVerification)
 route.post('/phone-verification', authController.phoneVerificationProcess)
 //middleware

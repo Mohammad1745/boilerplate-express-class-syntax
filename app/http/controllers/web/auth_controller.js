@@ -40,7 +40,16 @@ class AuthController extends Controller {
      * @param {Object} response
      */
     signupProcess = async (request, response) => {
-        const serviceResponse = await this.service.signUp( request)
+        const serviceResponse = await this.service.signUp( request, response)
+        return this.webResponse(serviceResponse, '/auth/phone-verification', {}, request, response)
+    }
+
+    /**
+     * @param {Object} request
+     * @param {Object} response
+     */
+    resendPhoneVerificationCode = async (request, response) => {
+        const serviceResponse = await this.service.resendPhoneVerificationCode( request)
         return this.webResponse(serviceResponse, '/auth/phone-verification', {}, request, response)
     }
 

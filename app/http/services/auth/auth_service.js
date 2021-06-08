@@ -1,9 +1,7 @@
 const ResponseService = require('../response_service')
 const UserService = require('../base/user_service')
 const twilioClient = require('twilio')(process.env.TWILIO_SID, process.env.TWILIO_TOKEN)
-const jwt = require('jsonwebtoken')
 const {makeHash, randomNumber, sendMessage} = require('../../../helper/helper')
-const {SESSION_TIMEOUT} = require('../../../helper/core_constants')
 
 class AuthService extends ResponseService {
 
@@ -31,19 +29,7 @@ class AuthService extends ResponseService {
             if (user.password !== makeHash(email,password)){
                 return this.response().error('Wrong email or password.')
             }
-            const {id, firstName, lastName, role} = user
-            const payload = {id, firstName, lastName, email, role}
-            const authToken = jwt.sign(payload, process.env.AUTH_SECRET, {expiresIn: SESSION_TIMEOUT+'s'})
-            let data = {firstName, lastName, email}
-            if (type==="api") {
-                data.authorization = {
-                    tokenType: 'Bearer',
-                    token: authToken
-                }
-            } else {
-                // Setting the auth token in cookies
-                response.cookie('authToken', authToken)
-            }
+            const data = this.userService.authentication(user, request, response)
             return this.response(data).success('User Logged In Successfully')
         } catch (e) {
             return this.response().error(e.message)
@@ -54,7 +40,7 @@ class AuthService extends ResponseService {
      * @param {Object} request
      * @return {Object}
      */
-    signUp = async request => {
+    signUp = async (request, response) => {
         try {
             let user = await this.userService.findOneWhere({where: {email: request.body.email}})
             if (user) {
@@ -62,7 +48,28 @@ class AuthService extends ResponseService {
             }
             const code = randomNumber(6)
             user = await this.userService.create( this.userService.userDataFormatter( request.body, code))
-            // sendMessage(user.phoneCode+user.phone, `\nYour account verification code is ${code}`, () => {}, err => {})
+            // sendMessage(user.phoneCode+user.phone, `\nYour account verification code is ${code}`, () => {}, err => {})//TODO: uncomment to get verification sms
+
+            const data = this.userService.authentication(user, request, response)
+            return this.response(data).success(`User Signed Up Successfully. Verification code has been send to ${user.phoneCode}${user.phone}.`)
+        } catch (e) {
+            return this.response().error(e.message)
+        }
+    }
+
+    /**
+     * @param {Object} request
+     * @return {Object}
+     */
+    resendPhoneVerificationCode = async request => {
+        try {
+            let user = await this.userService.findOneWhere({where: {phoneCode: request.body.phoneCode, phone: request.body.phone}})
+            if (!user) {
+                return this.response().error('Invalid User')
+            }
+            const code = randomNumber(6)
+            user = await this.userService.updateWhere({where:{id:user.id}}, {phoneVerificationCode:code, isPhoneVerified:false})
+            // sendMessage(user.phoneCode+user.phone, `\nYour account verification code is ${code}`, () => {}, err => {})//TODO: uncomment to get verification sms
             const {firstName, lastName, email, phoneCode, phone} = user
             return this.response({firstName, lastName, email, phoneCode, phone}).success(`User Signed Up Successfully. Verification code has been send to ${user.phoneCode}${user.phone}.`)
         } catch (e) {
@@ -83,6 +90,7 @@ class AuthService extends ResponseService {
             if (user.phoneVerificationCode !== request.body.code) {
                 return this.response().error('Invalid Code')
             }
+            await this.userService.updateWhere({where: {id: user.id}}, {isPhoneVerified: true})
             return this.response().success(`Verification successful`)
         } catch (e) {
             return this.response().error(e.message)
