@@ -13,6 +13,11 @@ class Request {
         for (let rule of rules) {
             if (rule==='required' && !value) return Promise.reject(`${key} field is required.`)
             else if (rule==='string' && typeof value !== 'string') return Promise.reject(`${key} must be an string.`)
+            else if (rule==='number' && typeof value !== 'number') return Promise.reject(`${key} must be a number.`)
+            else if (rule==='email') {
+                const regex = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+                if (!(typeof value === 'string' && regex.test(value))) return Promise.reject(`${key} must be a valid email.`)
+            }
             else if (rule.startsWith('min:')) {
                 const min = Number(rule.split(':')[1])
                 if (value.length<min) return Promise.reject(`${key} must have at least ${min} character`)

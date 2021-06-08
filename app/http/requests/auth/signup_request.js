@@ -5,7 +5,7 @@ class SignupRequest extends Request{
         super({
             firstName: 'required|string',
             lastName: 'required|string',
-            email: 'required|string',
+            email: 'required|email',
             phoneCode: 'required|string',
             phone: 'required|string',
             password: 'required|string|min:8',
