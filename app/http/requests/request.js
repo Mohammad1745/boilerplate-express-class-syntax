@@ -20,10 +20,7 @@ class Request {
             }
             else if (rule.startsWith('regex:')) {
                 let regString = rule.split(':')[1]
-                regString = regString.substr(1, regString.length-2)
-                console.log(regString)
-                const regex = new RegExp(regString)
-                console.log(regex)
+                const regex = new RegExp(regString.substr(1, regString.length-2))
                 if (!(typeof value === 'string' && regex.test(value))) return Promise.reject(`${key} is invalid.`)
             }
             else if (rule.startsWith('min:')) {
