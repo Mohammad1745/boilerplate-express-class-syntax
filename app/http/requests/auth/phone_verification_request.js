@@ -1,6 +1,6 @@
 const Request = require('../request')
 
-class PhoneVerification extends Request{
+class PhoneVerificationRequest extends Request{
     constructor() {
         super({
             phoneCode: 'required|string',
@@ -10,4 +10,4 @@ class PhoneVerification extends Request{
     }
 }
 
-module.exports = new PhoneVerification()
+module.exports = new PhoneVerificationRequest()
