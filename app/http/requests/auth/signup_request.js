@@ -6,7 +6,7 @@ class SignupRequest extends Request{
         super({
             firstName: 'required|string',
             lastName: 'required|string',
-            email: 'required|email',
+            email: 'required|email|unique:user',
             phoneCode: 'required|string|regex:/^[+]{1}[0-9]{3}$/',
             phone: 'required|string|regex:/^(1){1}[1-9]{1}[0-9]{8}$/',
             // role: 'required|in:'+[ADMIN_ROLE,USER_ROLE].join(','),
