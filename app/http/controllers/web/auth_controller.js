@@ -74,6 +74,40 @@ class AuthController extends Controller {
      * @param {Object} request
      * @param {Object} response
      */
+    resetPassword = (request, response) => {
+        return this.view('auth/reset_password', {layout: 'auth.hbs'}, request, response)
+    }
+
+    /**
+     * @param {Object} request
+     * @param {Object} response
+     */
+    resetPasswordProcess = async (request, response) => {
+        const serviceResponse = await this.service.resetPassword( request)
+        return this.webResponse(serviceResponse, '/auth/reset-password-code', {}, request, response)
+    }
+
+    /**
+     * @param {Object} request
+     * @param {Object} response
+     */
+    resetPasswordCode = (request, response) => {
+        return this.view('auth/reset_password_code', {layout: 'auth.hbs'}, request, response)
+    }
+
+    /**
+     * @param {Object} request
+     * @param {Object} response
+     */
+    resetPasswordCodeProcess = async (request, response) => {
+        const serviceResponse = await this.service.resetPasswordCode( request)
+        return this.webResponse(serviceResponse, '/auth/login', {}, request, response)
+    }
+
+    /**
+     * @param {Object} request
+     * @param {Object} response
+     */
     logoutProcess = (request, response) => {
         const serviceResponse = this.service.logout( request, response)
         return this.webResponse(serviceResponse, '/', {}, request, response)

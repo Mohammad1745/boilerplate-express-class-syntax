@@ -1,6 +1,6 @@
 const ResponseService = require('../response_service')
 const UserService = require('../base/user_service')
-const twilioClient = require('twilio')(process.env.TWILIO_SID, process.env.TWILIO_TOKEN)
+const PasswordResetService = require('../base/password_reset_service')
 const {makeHash, randomNumber, sendMessage} = require('../../../helper/helper')
 
 class AuthService extends ResponseService {
@@ -11,6 +11,7 @@ class AuthService extends ResponseService {
     constructor() {
         super()
         this.userService = new UserService
+        this.passwordResetService = new PasswordResetService
     }
 
     /**
@@ -93,6 +94,52 @@ class AuthService extends ResponseService {
             }
             await this.userService.updateWhere({where: {id: user.id}}, {phoneVerificationCode:null, isPhoneVerified: true})
             return this.response().success(`Verification successful`)
+        } catch (e) {
+            return this.response().error(e.message)
+        }
+    }
+
+    /**
+     * @param {Object} request
+     * @return {Object}
+     */
+    resetPassword = async request => {
+        try {
+            let user = await this.userService.findOneWhere({where: {phoneCode: request.body.phoneCode, phone: request.body.phone}})
+            if (!user) {
+                return this.response().error('Invalid User')
+            }
+            const code = randomNumber(6)
+            const {id, phoneCode, phone} = user
+            await this.passwordResetService.create( this.passwordResetService.passwordResetDataFormatter( id, code))
+            // sendMessage(user.phoneCode+user.phone, `\n Your reset password code is ${code}`, () => {}, err => {})//TODO: uncomment to get verification sms
+            return this.response({phoneCode, phone}).success(`Reset password code has been send to ${phoneCode}${phone}.`)
+        } catch (e) {
+            return this.response().error(e.message)
+        }
+    }
+
+    /**
+     * @param {Object} request
+     * @return {Object}
+     */
+    resetPasswordCode = async request => {
+        try {
+            try {
+                const user = await this.userService.findOneWhere({where: {phoneCode: request.body.phoneCode, phone: request.body.phone}})
+                if (!user) {
+                    return this.response().error('Invalid User')
+                }
+                const passwordReset = await this.passwordResetService.findOneWhere({where:{userId:user.id, code:request.body.code}})
+                if (!passwordReset) {
+                    return this.response().error('Invalid Code')
+                }
+                await this.userService.updateWhere({where: {id: user.id}}, {password:makeHash(user.email, request.body.password)})
+                await this.passwordResetService.destroy({where:{userId:user.id}})
+                return this.response().success(`Password Reset Successful.`)
+            } catch (e) {
+                return this.response().error(e.message)
+            }
         } catch (e) {
             return this.response().error(e.message)
         }
