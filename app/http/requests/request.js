@@ -3,25 +3,24 @@ const {wordSplitter} = require('../../helper/helper')
 
 class Request {
     constructor(rules) {
-        this.validators = Object.keys(rules).map(key => body(key).custom(value => this.#setRule(rules[key], key, value)))
+        this.validators = Object.keys(rules).map(key => body(key).custom((value, {req}) => this.#setRule(rules[key], key, value, req)))
     }
-
-    #setRule = (ruleString, key, value) => {//(required|string|min:NUMBER|max:NUMBER)
+    //RULES: required|email|string|number|regex:/^(1){3}$/|min:NUMBER|max:NUMBER|in:1,2,3|same:password
+    #setRule = (ruleString, key, value, req) => {
         const rules = ruleString.split('|')
         key = wordSplitter(key)
-        key = key.charAt(0).toUpperCase() + key.slice(1)
         for (let rule of rules) {
             if (rule==='required' && !value) return Promise.reject(`${key} field is required.`)
             else if (rule==='string' && typeof value !== 'string') return Promise.reject(`${key} must be an string.`)
-            else if (rule==='number' && typeof value !== 'number') return Promise.reject(`${key} must be a number.`)
+            else if (rule==='number' && isNaN(Number(value))) return Promise.reject(`${key} must be a number.`)
             else if (rule==='email') {
                 const regex = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-                if (!(typeof value === 'string' && regex.test(value))) return Promise.reject(`${key} is invalid.`)
+                if (!(typeof value === 'string' && regex.test(value))) return Promise.reject(`Invalid ${key}.`)
             }
             else if (rule.startsWith('regex:')) {
                 let regString = rule.split(':')[1]
                 const regex = new RegExp(regString.substr(1, regString.length-2))
-                if (!(typeof value === 'string' && regex.test(value))) return Promise.reject(`${key} is invalid.`)
+                if (!(typeof value === 'string' && regex.test(value))) return Promise.reject(`Invalid ${key}.`)
             }
             else if (rule.startsWith('min:')) {
                 const min = Number(rule.split(':')[1])
@@ -31,7 +30,16 @@ class Request {
                 const max = Number(rule.split(':')[1])
                 if (value.length>max) return Promise.reject(`${key} must have not more than ${max} character`)
             }
+            else if (rule.startsWith('in:')) {
+                const choices = rule.split(':')[1].split(',')
+                if (!choices.includes(value)) return Promise.reject(`Invalid ${key}.`)
+            }
             else if (rule.startsWith('same:')) {
+                let target = rule.split(':')[1]
+                if (value !== req.body[target]) {
+                    target = wordSplitter(target)
+                    return Promise.reject(`${key} and ${target} doesn't match.`)
+                }
             }
         }
         return Promise.resolve(true)

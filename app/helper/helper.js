@@ -48,6 +48,6 @@ module.exports = {
                 string = worldPieces[0] + " " + char + worldPieces[1]
             }
         })
-        return string
+        return string.charAt(0).toUpperCase() + string.slice(1)
     }
 }
