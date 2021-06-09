@@ -45,6 +45,21 @@ class AuthController extends Controller {
     phoneVerificationProcess = async (request, response) => {
         return response.json( await this.service.phoneVerification( request))
     }
+    /**
+     * @param {Object} request
+     * @param {Object} response
+     */
+    resetPasswordProcess = async (request, response) => {
+        return response.json( await this.service.resetPassword( request))
+    }
+
+    /**
+     * @param {Object} request
+     * @param {Object} response
+     */
+    resetPasswordCodeProcess = async (request, response) => {
+        return response.json( await this.service.resetPasswordCode( request))
+    }
 
     /**
      * @param {Object} request
