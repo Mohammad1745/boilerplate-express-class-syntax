@@ -58,7 +58,7 @@ class AuthController extends Controller {
      * @param {Object} response
      */
     phoneVerification = (request, response) => {
-        return this.view('auth/phoneVerification', {layout: 'auth.hbs'}, request, response)
+        return this.view('auth/phone_verification', {layout: 'auth.hbs'}, request, response)
     }
 
     /**

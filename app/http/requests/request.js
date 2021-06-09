@@ -3,11 +3,12 @@ const {wordSplitter} = require('../../helper/helper')
 const { QueryTypes, Sequelize} = require('sequelize')
 const sequelize = new Sequelize(process.env.DB_NAME, process.env.DB_USER, process.env.DB_USER, {dialect:process.env.DB_ENGINE})
 
+//RULES: required|string|number|email|unique:TABLE_NAME|regex:/^(1){3}$/|min:NUMBER|max:NUMBER|in:1,2,3|same:FIELD_NAME
 class Request {
     constructor(rules) {
-        this.validators = Object.keys(rules).map(key => body(key).custom((value, {req}) => this.#setRule(rules[key], key, value, req)))
+        let validationRules = Object.keys(rules).map(key => body(key).custom((value, {req}) => this.#setRule(rules[key], key, value, req)))
+        this.validate = [validationRules, this.#validator]
     }
-    //RULES: required|string|number|email|unique:TABLE_NAME|regex:/^(1){3}$/|min:NUMBER|max:NUMBER|in:1,2,3|same:FIELD_NAME
     #setRule = async (ruleString, key, value, req) => {
         const rules = ruleString.split('|')
         const fieldName = wordSplitter(key)
@@ -52,7 +53,7 @@ class Request {
         return Promise.resolve(true)
     }
 
-    validate = (request, response, next) => {
+    #validator = (request, response, next) => {
         const error = validationResult(request)
         if (!error.isEmpty()) {
             const errors = {}
