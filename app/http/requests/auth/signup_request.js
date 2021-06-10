@@ -12,7 +12,7 @@ class SignupRequest extends Request{
             // role: 'required|in:'+[ADMIN_ROLE,USER_ROLE].join(','),
             password: 'required|string|min:8',
             confirmPassword: 'required|same:password',
-            arr: 'required|array',
+            // arr: 'required|array',
         })
     }
 }
