@@ -16,7 +16,7 @@ class ProfileController extends Controller {
      * @return {JSON}
      */
     profile = (request, response) => {
-        this.view('user/profile', {serviceResponse: this.service.profile( request, response), layout: 'user.hbs'}, request, response)
+        this.view('user/profile','user.hbs', request, response, this.service.profile( request, response))
     }
 }
 

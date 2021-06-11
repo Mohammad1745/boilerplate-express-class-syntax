@@ -15,7 +15,7 @@ class AuthController extends Controller {
      * @param {Object} response
      */
     login = (request, response) => {
-        return this.view('auth/login', {layout: 'auth.hbs'}, request, response)
+        return this.view('auth/login', 'auth.hbs', request, response)
     }
 
     /**
@@ -23,7 +23,7 @@ class AuthController extends Controller {
      * @param {Object} response
      */
     signup = (request, response) => {
-        return this.view('auth/signup', {layout: 'auth.hbs'}, request, response)
+        return this.view('auth/signup', 'auth.hbs', request, response)
     }
 
     /**
@@ -58,7 +58,7 @@ class AuthController extends Controller {
      * @param {Object} response
      */
     phoneVerification = (request, response) => {
-        return this.view('auth/phone_verification', {layout: 'auth.hbs'}, request, response)
+        return this.view('auth/phone_verification', 'auth.hbs', request, response)
     }
 
     /**
@@ -75,7 +75,7 @@ class AuthController extends Controller {
      * @param {Object} response
      */
     resetPassword = (request, response) => {
-        return this.view('auth/reset_password', {layout: 'auth.hbs'}, request, response)
+        return this.view('auth/reset_password', 'auth.hbs', request, response)
     }
 
     /**
@@ -92,7 +92,7 @@ class AuthController extends Controller {
      * @param {Object} response
      */
     resetPasswordCode = (request, response) => {
-        return this.view('auth/reset_password_code', {layout: 'auth.hbs'}, request, response)
+        return this.view('auth/reset_password_code', 'auth.hbs', request, response)
     }
 
     /**

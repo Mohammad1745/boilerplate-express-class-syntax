@@ -13,7 +13,7 @@ class DashboardController extends Controller {
      * @param {Object} response
      * @return {JSON}
      */
-    dashboard = (request, response) => this.view('user/dashboard', {layout: 'user.hbs'}, request, response)
+    dashboard = (request, response) => this.view('user/dashboard', 'user.hbs', request, response)
 }
 
 module.exports = new DashboardController()

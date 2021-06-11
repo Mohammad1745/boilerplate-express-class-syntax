@@ -1,7 +1,14 @@
 class Controller {
     constructor() {}
 
-    view = (view, {serviceResponse, layout} = {}, request, response) => {
+    /**
+     * @param {string} view
+     * @param {{layout: string}|string} layout
+     * @param {Object} request
+     * @param {Object} response
+     * @param serviceResponse
+     */
+    view = (view, layout, request, response, serviceResponse=null) => {
         let data = {}
         if (serviceResponse) {
             data = serviceResponse.data
