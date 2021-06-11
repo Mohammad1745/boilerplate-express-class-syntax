@@ -14,13 +14,13 @@ class AuthService extends ResponseService {
 
     /**
      * @param {Object} request
-     * @param response
      * @return {Object}
      */
-    profile = (request, response) => {
+    profile = async (request) => {
         try {
-
-            return this.response().success('User Logged Out Successfully')
+            const user = await this.userService.findOneWhere({id:request.user.id}, ['firstName', 'lastName', 'email','phoneCode', 'phone'])
+            const {firstName, lastName, email,phoneCode, phone} = user
+            return this.response( {firstName, lastName, email,phoneCode, phone}).success()
         } catch (e) {
             return this.response().error(e.message)
         }

@@ -15,8 +15,8 @@ class ProfileController extends Controller {
      * @param {Object} response
      * @return {JSON}
      */
-    profile = (request, response) => {
-        this.view('user/profile','user.hbs', request, response, this.service.profile( request, response))
+    profile = async (request, response) => {
+        return this.view('user/profile','user.hbs', request, response, await this.service.profile( request))
     }
 }
 

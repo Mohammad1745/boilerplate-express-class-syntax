@@ -13,8 +13,7 @@ class Controller {
         if (serviceResponse) {
             data = serviceResponse.data
             if (!serviceResponse.success) {
-                response.cookie('error', serviceResponse.message)
-                return response.redirect( "back")
+                return response.render(view, {error:serviceResponse.message, layout})
             }
         }
         //cookies from redirected routes
