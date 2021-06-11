@@ -13,15 +13,15 @@ route.get('/login', authController.login)
 route.get('/register', authController.signup)
 route.post('/login', ...loginRequest.validate, authController.loginProcess)
 route.post('/register', ...signupRequest.validate, authController.signupProcess)
-route.get('/resend-phone-verification-code', authController.resendPhoneVerificationCode)
-route.get('/phone-verification', authController.phoneVerification)
-route.post('/phone-verification', ...phoneVerificationRequest.validate, authController.phoneVerificationProcess)
 route.get('/reset-password', authController.resetPassword)
 route.post('/reset-password', ...passwordResetRequest.validate, authController.resetPasswordProcess)
 route.get('/reset-password-code', authController.resetPasswordCode)
 route.post('/reset-password-code', ...passwordResetCodeRequest.validate, authController.resetPasswordCodeProcess)
 //middleware
 route.use(auth)
+route.get('/resend-phone-verification-code', authController.resendPhoneVerificationCode)
+route.get('/phone-verification', authController.phoneVerification)
+route.post('/phone-verification', ...phoneVerificationRequest.validate, authController.phoneVerificationProcess)
 route.get('/logout', authController.logoutProcess)
 
 module.exports = route
