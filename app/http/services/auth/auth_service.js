@@ -64,15 +64,15 @@ class AuthService extends ResponseService {
      */
     resendPhoneVerificationCode = async request => {
         try {
-            let user = await this.userService.findOneWhere({phoneCode: request.body.phoneCode, phone: request.body.phone})
+            let user = await this.userService.findOneWhere({phoneCode: request.user.phoneCode, phone: request.user.phone})
             if (!user) {
                 return this.response().error('Invalid User')
             }
             const code = randomNumber(6)
-            user = await this.userService.updateWhere({id:user.id}, {phoneVerificationCode:code, isPhoneVerified:false})
+            await this.userService.updateWhere({id:user.id}, {phoneVerificationCode:code, isPhoneVerified:false})
             // sendMessage(user.phoneCode+user.phone, `\nYour account verification code is ${code}`, () => {}, err => {})//TODO: uncomment to get verification sms
             const {firstName, lastName, email, phoneCode, phone} = user
-            return this.response({firstName, lastName, email, phoneCode, phone}).success(`User Signed Up Successfully. Verification code has been send to ${user.phoneCode}${user.phone}.`)
+            return this.response({firstName, lastName, email, phoneCode, phone}).success(`Verification code has been send to ${user.phoneCode}${user.phone}.`)
         } catch (e) {
             return this.response().error(e.message)
         }
