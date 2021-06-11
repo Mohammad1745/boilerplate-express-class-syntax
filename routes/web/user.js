@@ -5,11 +5,15 @@ const {auth}  = require('../../app/http/middlewares/authentication')
 const {user}  = require('../../app/http/middlewares/user')
 const {verified}  = require('../../app/http/middlewares/phoneVerification')
 const dashboardController = require('../../app/http/controllers/web/user/dashboard_controller')
+const profileController = require('../../app/http/controllers/web/user/profile_controller')
 
 //middleware
 route.use(auth, user, verified)
 
 //dashboard
 route.get('/dashboard', dashboardController.dashboard)
+
+//profile
+route.get('/profile', profileController.profile)
 
 module.exports = route

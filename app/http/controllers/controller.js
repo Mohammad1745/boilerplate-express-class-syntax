@@ -1,7 +1,15 @@
 class Controller {
     constructor() {}
 
-    view = (view, {data, layout} = {}, request, response) => {
+    view = (view, {serviceResponse, layout} = {}, request, response) => {
+        let data = {}
+        if (serviceResponse) {
+            data = serviceResponse.data
+            if (!serviceResponse.success) {
+                response.cookie('error', serviceResponse.message)
+                return response.redirect( "back")
+            }
+        }
         //cookies from redirected routes
         const cookies = {errors:[] , error:null, success:null, old:{}, data:{}}
         Object.keys(cookies).map(element => {
