@@ -7,7 +7,7 @@ class ProfileController extends Controller {
      * */
     constructor() {
         super();
-        this.service = new ProfileService()
+        this.service = new ProfileService
     }
 
     /**
@@ -20,4 +20,4 @@ class ProfileController extends Controller {
     }
 }
 
-module.exports = new ProfileController()
+module.exports = new ProfileController
