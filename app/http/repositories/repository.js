@@ -8,9 +8,10 @@ class Repository {
     }
 
     /**
+     * @param {array|Object} fields
      * @return {Object}
      */
-    findAll = async () =>  await this.model.findAll()
+    findAll = async (fields={exclude:[]}) =>  await this.model.findAll({attributes:fields})
 
     /**
      * @param {Object} data
@@ -20,28 +21,30 @@ class Repository {
 
     /**
      * @param {Object} where
+     * @param {array|Object} fields
      * @return {Object}
      */
-    findOneWhere = async where =>  await this.model.findOne( where)
+    findOneWhere = async (where, fields={exclude:[]}) =>  await this.model.findOne({ where:where, attributes: fields})
 
     /**
      * @param {Object} where
+     * @param {array|Object} fields
      * @return {Object}
      */
-    findAllWhere = async where =>  await this.model.findAll( where)
+    findAllWhere = async (where, fields={exclude:[]}) =>  await this.model.findAll({ where:where, attributes: fields})
 
     /**
      * @param {Object} where
      * @param {Object} data
      * @return {Object}
      */
-    updateWhere = async (where, data) => await this.model.update( data, where)
+    updateWhere = async (where, data) => await this.model.update( data, {where:where})
 
     /**
      * @param {Object} where
      * @return {Object}
      */
-    destroy = async where => await this.model.destroy( where)
+    destroy = async where => await this.model.destroy( {where:where})
 }
 
 module.exports = Repository

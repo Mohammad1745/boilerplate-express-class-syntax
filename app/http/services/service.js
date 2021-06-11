@@ -8,9 +8,10 @@ class Service {
     }
 
     /**
+     * @param {array|Object} fields
      * @return {Object}
      */
-    findAll = async () =>  await this.repository.findAll()
+    findAll = async (fields={exclude:[]}) =>  await this.repository.findAll( fields)
 
     /**
      * @param {Object} data
@@ -20,25 +21,27 @@ class Service {
 
     /**
      * @param {Object} where
+     * @param {array|Object} fields
      * @return {Object}
      */
-    findOneWhere = async where =>  await this.repository.findOneWhere( where)
+    findOneWhere = async (where, fields={exclude:[]}) =>  await this.repository.findOneWhere( where, fields)
 
     /**
      * @param {Object} where
+     * @param {array|Object} fields
      * @return {Object}
      */
-    findAllWhere = async where =>  await this.repository.findAllWhere( where)
+    findAllWhere = async (where, fields={exclude:[]}) =>  await this.repository.findAllWhere( where, fields)
 
     /**
      * @param {Object} where
-     * @param {Object} data
+     * @param {array|Object} data
      * @return {Object}
      */
     updateWhere = async (where, data) => await this.repository.updateWhere( where, data)
 
     /**
-     * @param {Object} where
+     * @param {array|Object} where
      * @return {Object}
      */
     destroy = async where => await this.repository.destroy( where)

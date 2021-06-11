@@ -17,13 +17,12 @@ class AuthService extends ResponseService {
     /**
      * @param {Object} request
      * @param response
-     * @param type
      * @return {Object}
      */
     login = async (request, response) => {
         try {
             const { email, password } = request.body
-            const user = await this.userService.findOneWhere({where: {email: email}})
+            const user = await this.userService.findOneWhere({email: email})
             if (!user){
                 return this.response().error('Email User Doesn\'t Exists. Please Register An Account.')
             }
@@ -44,7 +43,7 @@ class AuthService extends ResponseService {
      */
     signUp = async (request, response) => {
         try {
-            let user = await this.userService.findOneWhere({where: {email: request.body.email}})
+            let user = await this.userService.findOneWhere({email: request.body.email})
             if (user) {
                 return this.response().error('User Already Exists')
             }
@@ -65,12 +64,12 @@ class AuthService extends ResponseService {
      */
     resendPhoneVerificationCode = async request => {
         try {
-            let user = await this.userService.findOneWhere({where: {phoneCode: request.body.phoneCode, phone: request.body.phone}})
+            let user = await this.userService.findOneWhere({phoneCode: request.body.phoneCode, phone: request.body.phone})
             if (!user) {
                 return this.response().error('Invalid User')
             }
             const code = randomNumber(6)
-            user = await this.userService.updateWhere({where:{id:user.id}}, {phoneVerificationCode:code, isPhoneVerified:false})
+            user = await this.userService.updateWhere({id:user.id}, {phoneVerificationCode:code, isPhoneVerified:false})
             // sendMessage(user.phoneCode+user.phone, `\nYour account verification code is ${code}`, () => {}, err => {})//TODO: uncomment to get verification sms
             const {firstName, lastName, email, phoneCode, phone} = user
             return this.response({firstName, lastName, email, phoneCode, phone}).success(`User Signed Up Successfully. Verification code has been send to ${user.phoneCode}${user.phone}.`)
@@ -85,14 +84,14 @@ class AuthService extends ResponseService {
      */
     phoneVerification = async request => {
         try {
-            let user = await this.userService.findOneWhere({where: {phoneCode: request.body.phoneCode, phone: request.body.phone}})
+            let user = await this.userService.findOneWhere({phoneCode: request.body.phoneCode, phone: request.body.phone})
             if (!user) {
                 return this.response().error('Invalid User')
             }
             if (user.phoneVerificationCode !== request.body.code) {
                 return this.response().error('Invalid Code')
             }
-            await this.userService.updateWhere({where: {id: user.id}}, {phoneVerificationCode:null, isPhoneVerified: true})
+            await this.userService.updateWhere({id: user.id}, {phoneVerificationCode:null, isPhoneVerified: true})
             return this.response().success(`Verification successful`)
         } catch (e) {
             return this.response().error(e.message)
@@ -105,7 +104,7 @@ class AuthService extends ResponseService {
      */
     resetPassword = async request => {
         try {
-            let user = await this.userService.findOneWhere({where: {phoneCode: request.body.phoneCode, phone: request.body.phone}})
+            let user = await this.userService.findOneWhere({phoneCode: request.body.phoneCode, phone: request.body.phone})
             if (!user) {
                 return this.response().error('Invalid User')
             }
@@ -126,16 +125,16 @@ class AuthService extends ResponseService {
     resetPasswordCode = async request => {
         try {
             try {
-                const user = await this.userService.findOneWhere({where: {phoneCode: request.body.phoneCode, phone: request.body.phone}})
+                const user = await this.userService.findOneWhere({phoneCode: request.body.phoneCode, phone: request.body.phone})
                 if (!user) {
                     return this.response().error('Invalid User')
                 }
-                const passwordReset = await this.passwordResetService.findOneWhere({where:{userId:user.id, code:request.body.code}})
+                const passwordReset = await this.passwordResetService.findOneWhere({userId:user.id, code:request.body.code})
                 if (!passwordReset) {
                     return this.response().error('Invalid Code')
                 }
-                await this.userService.updateWhere({where: {id: user.id}}, {password:makeHash(user.email, request.body.password)})
-                await this.passwordResetService.destroy({where:{userId:user.id}})
+                await this.userService.updateWhere({id: user.id}, {password:makeHash(user.email, request.body.password)})
+                await this.passwordResetService.destroy({userId:user.id})
                 return this.response().success(`Password Reset Successful.`)
             } catch (e) {
                 return this.response().error(e.message)
