@@ -11,5 +11,15 @@
             <li class="list-unstyled">Phone: {{phoneCode}}{{phone}}</li>
         </ul>
     </div>
+    <div class="col-md-6">
+        <form method="POST" action="/user/profile/upload" enctype="multipart/form-data">
+            <div class="form-group">
+                <label for="imageInput">Image</label>
+                <input name="image" type="file" class="form-control" id="imageInput" >
+                {{#if errors}} <span class="text-danger">{{errors.email.msg}}</span> {{/if}}
+            </div>
+            <button type="submit" class="btn btn-primary">Save</button>
+        </form>
+    </div>
 </div>
 {{/section}}

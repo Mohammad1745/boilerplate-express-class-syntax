@@ -18,6 +18,16 @@ class ProfileController extends Controller {
     profile = async (request, response) => {
         return this.view('user/profile','user.hbs', request, response, await this.service.profile( request))
     }
+
+    /**
+     * @param {Object} request
+     * @param {Object} response
+     * @return {JSON}
+     */
+    upload = async (request, response) =>  {
+        const serviceResponse = await this.service.uploadImage(request, response)
+        return this.webResponse(serviceResponse, 'user/profile', {}, request, response)
+    }
 }
 
 module.exports = new ProfileController

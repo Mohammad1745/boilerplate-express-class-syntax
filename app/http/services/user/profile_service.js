@@ -1,6 +1,6 @@
 const ResponseService = require('../response_service')
 const UserService = require('../base/user_service')
-const {makeHash, randomNumber, sendMessage} = require('../../../helper/helper')
+const {imageFilter, uploadFile} = require('../../../helper/helper')
 
 class AuthService extends ResponseService {
 
@@ -21,6 +21,21 @@ class AuthService extends ResponseService {
             const user = await this.userService.findOneWhere({id:request.user.id}, ['firstName', 'lastName', 'email','phoneCode', 'phone'])
             const {firstName, lastName, email,phoneCode, phone} = user
             return this.response( {firstName, lastName, email,phoneCode, phone}).success()
+        } catch (e) {
+            return this.response().error(e.message)
+        }
+    }
+
+    /**
+     * @param {Object} request
+     * @param response
+     * @return {Object}
+     */
+    uploadImage = async (request, response) => {
+        try {
+            let image = await uploadFile('public/uploads/', 'image', imageFilter, request, response)
+            if (image.err) return this.response().error(image.msg)
+            return this.response().success(image.fileName)
         } catch (e) {
             return this.response().error(e.message)
         }
