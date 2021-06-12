@@ -34,8 +34,11 @@ class AuthService extends ResponseService {
     uploadImage = async (request, response) => {
         try {
             let image = await uploadFile('public/uploads/', 'image', imageFilter, request, response)
-            if (image.err) return this.response().error(image.msg)
-            return this.response().success(image.fileName)
+            if (image.err) {
+                return this.response().error(image.err)
+            }
+            await this.userService.updateWhere({id:request.user.id}, {image:image.fileName})
+            return this.response().success("Profile Picture updated successfully")
         } catch (e) {
             return this.response().error(e.message)
         }

@@ -26,7 +26,7 @@ class ProfileController extends Controller {
      */
     upload = async (request, response) =>  {
         const serviceResponse = await this.service.uploadImage(request, response)
-        return this.webResponse(serviceResponse, 'user/profile', {}, request, response)
+        return this.webResponse(serviceResponse, '/user/profile', {}, request, response)
     }
 }
 

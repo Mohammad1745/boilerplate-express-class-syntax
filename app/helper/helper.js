@@ -25,48 +25,36 @@ module.exports = {
         let result = {}
         let upload = multer({
             storage: multer.diskStorage({
-                destination: function(req, file, cb) {
-                    cb(null, directory)
-                },
+                destination: (req, file, cb) => cb(null, directory),
                 // By default, multer removes file extensions so let's add them back
-                filename: (req, file, cb) => cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname)),
-                fileFilter: (req, file, cb) => {
-                    // Accept images only
-                    if (!path.extname(file.originalname).match(/\.(jpg|JPG|jpeg|JPEG|png|PNG|gif|GIF)$/)) {
-                        req.fileValidationError = 'Only image files are allowed!';
-                        return cb(new Error('Only image files are allowed!'), false);
-                    }
-                    cb(null, true);
-                },
+                filename: (req, file, cb) => cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname))
             }),
-
+            fileFilter: filter,
         }).single(fieldName)
         upload = util.promisify(upload)
         try {
             await upload(request, response)
             result.fileName = request.file.filename
         } catch (err) {
-            // request.file contains information of uploaded file
-            // request.body contains information of text fields, if there were any
-            if (!request.hasOwnProperty('file')) {
-                result.err = 'Please select an image to upload'
-            }
-            else if (request.fileValidationError) {
-                result.err = request.fileValidationError
-            }
-            else if (err instanceof multer.MulterError) {
-                result.err = err
-            }
-            else if (err) {
-                result.err = err
-            }
+            if (request.fileValidationError)  result.err = request.fileValidationError
+            else if (!request.file)  result.err = 'Please select an image to upload'
+            else if (err instanceof multer.MulterError)  result.err = err
+            else if (err)  result.err = err
         }
         return result
     },
 
     imageFilter : (req, file, cb) => {
         // Accept images only
-        if (!file.originalname.match(/\.(jpg|JPG|jpeg|JPEG|png|PNG|gif|GIF)$/)) {
+        if (!path.extname(file.originalname).match(/\.(jpg|JPG|jpeg|JPEG|png|PNG|gif|GIF)$/)) {
+            req.fileValidationError = 'Only image files are allowed!';
+            return cb(new Error('Only image files are allowed!'), false);
+        }
+        cb(null, true);
+    },
+    docFilter : (req, file, cb) => {
+        // Accept images only
+        if (!path.extname(file.originalname).match(/\.(pdf|PDF|doc|DOC|docx|DOCX)$/)) {
             req.fileValidationError = 'Only image files are allowed!';
             return cb(new Error('Only image files are allowed!'), false);
         }
