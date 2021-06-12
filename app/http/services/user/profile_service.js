@@ -1,6 +1,6 @@
 const ResponseService = require('../response_service')
 const UserService = require('../base/user_service')
-const {imageFilter, uploadFile} = require('../../../helper/helper')
+const {imageFilter, uploadFile, avatarViewPath, avatarPath} = require('../../../helper/helper')
 
 class AuthService extends ResponseService {
 
@@ -18,9 +18,11 @@ class AuthService extends ResponseService {
      */
     profile = async (request) => {
         try {
-            const user = await this.userService.findOneWhere({id:request.user.id}, ['firstName', 'lastName', 'email','phoneCode', 'phone'])
+            const user = await this.userService.findOneWhere({id:request.user.id}, ['firstName', 'lastName', 'email','phoneCode', 'phone', 'image'])
             const {firstName, lastName, email,phoneCode, phone} = user
-            return this.response( {firstName, lastName, email,phoneCode, phone}).success()
+            const url = request.headers.referer.split(request.headers.host)[0] + request.headers.host
+            const image = url+avatarViewPath()+user.image
+            return this.response( {firstName, lastName, email,phoneCode, image,phone}).success()
         } catch (e) {
             return this.response().error(e.message)
         }
@@ -33,7 +35,7 @@ class AuthService extends ResponseService {
      */
     uploadImage = async (request, response) => {
         try {
-            let image = await uploadFile('public/uploads/', 'image', imageFilter, request, response)
+            let image = await uploadFile(avatarPath(), 'image', imageFilter, request, response)
             if (image.err) {
                 return this.response().error(image.err)
             }

@@ -21,6 +21,9 @@ module.exports = {
         return input ? output[input] : output;
     },
 
+    avatarPath: () => 'public/uploads/avatar/',
+    avatarViewPath: () => '/uploads/avatar/',
+
     uploadFile: async (directory, fieldName, filter, request, response) => {
         let result = {}
         let upload = multer({
