@@ -20,9 +20,9 @@ class AuthService extends ResponseService {
         try {
             const user = await this.userService.findOneWhere({id:request.user.id}, ['firstName', 'lastName', 'email','phoneCode', 'phone', 'image'])
             const {firstName, lastName, email,phoneCode, phone} = user
-            const url = request.headers.referer.split(request.headers.host)[0] + request.headers.host
+            const url = 'http://'+request.headers.host
             const image = url+avatarViewPath()+user.image
-            return this.response( {firstName, lastName, email,phoneCode, image,phone}).success()
+            return this.response( {firstName, lastName, email,phoneCode, phone, image}).success()
         } catch (e) {
             return this.response().error(e.message)
         }
