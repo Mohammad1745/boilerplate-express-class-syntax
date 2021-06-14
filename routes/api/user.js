@@ -10,6 +10,6 @@ route.use(authApi, user, verified)
 
 //profile
 route.get('/profile', profileController.profile)
-route.post('/profile/upload-image', profileController.upload)
+route.post('/profile/upload-image', profileController.uploadImage)
 
 module.exports = route
