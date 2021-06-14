@@ -22,7 +22,7 @@
         </ul>
     </div>
     <div class="col-md-6">
-        <form method="POST" action="/admin/profile/upload-image" enctype="multipart/form-data">
+        <form method="POST" action="/admin/profile/upload-image" enctype="multipart/form-data" id="change_profile_picture">
             <div class="form-group">
 <!--                <label for="imageInput">Image</label>-->
                 <input name="image" type="file" class="dropify" id="imageInput">
@@ -46,7 +46,7 @@
         //     }
         // });
 
-    // document.querySelector('#change_profile_picture').style.display = 'none'
+    document.querySelector('#change_profile_picture').style.display = 'none'
         document.addEventListener('DOMContentLoaded', () => {
             document.querySelector('#profile_picture_btn').addEventListener('click', () => {
                 document.querySelector('#change_profile_picture').style.display = null
