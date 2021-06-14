@@ -15,6 +15,6 @@ route.get('/dashboard', dashboardController.dashboard)
 
 //profile
 route.get('/profile', profileController.profile)
-route.post('/profile/upload', profileController.upload)
+route.post('/profile/upload-image', profileController.uploadImage)
 
 module.exports = route
