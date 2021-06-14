@@ -3,7 +3,7 @@ const route = express.Router()
 
 const {auth}  = require('../../app/http/middlewares/authentication')
 const {user}  = require('../../app/http/middlewares/user')
-const {verified}  = require('../../app/http/middlewares/phoneVerification')
+const {verified}  = require('../../app/http/middlewares/phone_verification')
 const dashboardController = require('../../app/http/controllers/web/user/dashboard_controller')
 const profileController = require('../../app/http/controllers/web/user/profile_controller')
 

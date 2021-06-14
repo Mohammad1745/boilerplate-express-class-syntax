@@ -7,7 +7,7 @@ const phoneVerificationRequest = require('../../app/http/requests/auth/phone_ver
 const passwordResetRequest = require('../../app/http/requests/auth/reset_password_request')
 const passwordResetCodeRequest = require('../../app/http/requests/auth/reset_password_code_request')
 const authController = require('../../app/http/controllers/api/auth_controller')
-const {authApi}  = require('../../app/http/middlewares/apiAuthentication')
+const {authApi}  = require('../../app/http/middlewares/api_authentication')
 
 route.post('/login', ...loginRequest.validate, authController.login)
 route.post('/register', ...signupRequest.validate, authController.signup)
