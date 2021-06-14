@@ -1,0 +1,56 @@
+{{#section 'title'}}
+    Profile
+{{/section}}
+
+{{#section 'style'}}
+    <link rel="stylesheet" href="/assets/plugins/dropify/dropify.css" type="text/css">
+{{/section}}
+
+{{#section 'content'}}
+<div class="row justify-content-md-center" style="margin-top: 100px">
+    <div class="col-md-6">
+        <ul>
+            <li class="list-unstyled" id="image">
+                <img src="{{image}}" alt="Avatar" height="200">
+                <button class="btn btn-dark" id="profile_picture_btn" style="margin: -150px 0 0 -50px;">
+                    <i class="fa fa-pencil-alt" aria-hidden="true"></i>
+                </button>
+            </li>
+            <li class="list-unstyled">Name: {{firstName}} {{lastName}}</li>
+            <li class="list-unstyled">Email: {{email}}</li>
+            <li class="list-unstyled">Phone: {{phoneCode}}{{phone}}</li>
+        </ul>
+    </div>
+    <div class="col-md-6">
+        <form method="POST" action="/admin/profile/upload" enctype="multipart/form-data">
+            <div class="form-group">
+<!--                <label for="imageInput">Image</label>-->
+                <input name="image" type="file" class="dropify" id="imageInput">
+                {{#if errors}} <span class="text-danger">{{errors.email.msg}}</span> {{/if}}
+            </div>
+            <button type="submit" class="btn btn-primary">Save</button>
+        </form>
+    </div>
+</div>
+{{/section}}
+
+{{#section 'script'}}
+    <script src="/assets/plugins/dropify/dropify.js"></script>
+    <script>
+        // $('.dropify').dropify({
+        //     messages: {
+        //         'default': 'Drag and drop a file here or click',
+        //         'replace': 'Drag and drop or click to replace',
+        //         'remove':  'Remove',
+        //         'error':   'Ooops, something wrong happended.'
+        //     }
+        // });
+
+    // document.querySelector('#change_profile_picture').style.display = 'none'
+        document.addEventListener('DOMContentLoaded', () => {
+            document.querySelector('#profile_picture_btn').addEventListener('click', () => {
+                document.querySelector('#change_profile_picture').style.display = null
+            })
+        })
+    </script>
+{{/section}}
